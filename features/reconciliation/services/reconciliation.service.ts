@@ -1,25 +1,33 @@
 import { api } from "@/shared/lib/api";
+import {
+  ReconciliationApiResponse,
+  ReconciliationQueryParams,
+} from "../types/types";
 
-export const getLetKnowPay = async (params: {
-  page: number;
-  limit: number;
-  search?: string;
-  status?: string;
-}) => {
-  const { data } = await api.get("/reconciliation/letknowpay", {
-    params,
-  });
+//  LetKnowPay
+export const fetchLetKnowPay = async (
+  params: ReconciliationQueryParams,
+): Promise<ReconciliationApiResponse> => {
+  const { data } = await api.get<ReconciliationApiResponse>(
+    "/reconciliation/letknowpay",
+    {
+      params,
+    },
+  );
+
   return data;
 };
 
-export const getWithdrawals = async (params: {
-  page: number;
-  limit: number;
-  search?: string;
-  status?: string;
-}) => {
-  const { data } = await api.get("/reconciliation/letknowpay/withdrawal", {
-    params,
-  });
+//  Withdrawal
+export const fetchWithdrawals = async (
+  params: ReconciliationQueryParams,
+): Promise<ReconciliationApiResponse> => {
+  const { data } = await api.get<ReconciliationApiResponse>(
+    "/reconciliation/letknowpay/withdrawal",
+    {
+      params,
+    },
+  );
+
   return data;
 };

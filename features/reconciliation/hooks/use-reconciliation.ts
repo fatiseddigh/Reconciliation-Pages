@@ -1,21 +1,34 @@
 import { useQuery } from "@tanstack/react-query";
 import {
-  getLetKnowPay,
-  getWithdrawals,
+  fetchLetKnowPay,
+  fetchWithdrawals,
 } from "../services/reconciliation.service";
+import { ReconciliationQueryParams } from "../types/types";
+import { mapReconciliationResponse } from "../utils/reconciliation.mapper";
+import { queryKeys } from "@/shared/lib/query-keys";
+import { normalizeReconciliationParams } from "../utils/reconciliation.query";
+
+type ReconciliationType = "letknowpay" | "withdrawal";
 
 export const useReconciliation = (
-  type: "letknowpay" | "withdrawal",
-  params: {
-    page: number;
-    limit: number;
-    search?: string;
-    status?: string;
-  },
+  type: ReconciliationType,
+  params: ReconciliationQueryParams,
 ) => {
+  const normalizedParams = normalizeReconciliationParams(params);
+
   return useQuery({
-    queryKey: ["reconciliation", type, params],
-    queryFn: () =>
-      type === "letknowpay" ? getLetKnowPay(params) : getWithdrawals(params),
+    queryKey: queryKeys.reconciliation(type, normalizedParams),
+
+    queryFn: async () => {
+      const data =
+        type === "letknowpay"
+          ? await fetchLetKnowPay(normalizedParams)
+          : await fetchWithdrawals(normalizedParams);
+
+      return mapReconciliationResponse(data);
+    },
+
+    placeholderData: (previousData) => previousData, // for pagination
+    staleTime: 1000 * 30, // 30s cache
   });
 };
