@@ -26,3 +26,19 @@ export interface ReconciliationItem {
   reference: string;
   createdAt: Date;
 }
+
+// Query Params
+export interface ReconciliationQueryParams {
+  page: number;
+  limit: number;
+  search?: string;
+  status?: string;
+}
+
+// UI Response
+export interface ReconciliationResponse {
+  items: ReconciliationItem[];
+  total: number;
+  page: number;
+  limit: number;
+}
