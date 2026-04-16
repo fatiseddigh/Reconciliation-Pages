@@ -20,12 +20,23 @@ export const useReconciliation = (
     queryKey: queryKeys.reconciliation(type, normalizedParams),
 
     queryFn: async () => {
-      const data =
-        type === "letknowpay"
-          ? await fetchLetKnowPay(normalizedParams)
-          : await fetchWithdrawals(normalizedParams);
+      try {
+        const data =
+          type === "letknowpay"
+            ? await fetchLetKnowPay(normalizedParams)
+            : await fetchWithdrawals(normalizedParams);
 
-      return mapReconciliationResponse(data);
+        console.log("RAW API DATA:", data);
+
+        const mapped = mapReconciliationResponse(data);
+
+        console.log("MAPPED DATA:", mapped);
+
+        return mapped;
+      } catch (error) {
+        console.error("QUERY ERROR:", error);
+        throw error;
+      }
     },
 
     placeholderData: (previousData) => previousData, // for pagination

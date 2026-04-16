@@ -10,12 +10,12 @@ export const mapReconciliationItem = (
   item: ReconciliationApiItem,
 ): ReconciliationItem => {
   return {
-    id: item.id,
-    amount: item.amount,
-    currency: item.currency,
-    status: mapStatus(item.status),
-    reference: item.reference,
-    createdAt: new Date(item.created_at),
+    id: String(item.crm_id),
+    amount: item.gateway_amount,
+    currency: "USD",
+    status: mapStatus(item.recon_status),
+    reference: item.payment_id,
+    createdAt: new Date(item.deal_time),
   };
 };
 
@@ -24,7 +24,7 @@ export const mapReconciliationResponse = (
   response: ReconciliationApiResponse,
 ): ReconciliationResponse => {
   return {
-    items: response.data.map(mapReconciliationItem),
+    items: response.rows.map(mapReconciliationItem),
     total: response.total,
     page: response.page,
     limit: response.limit,
@@ -33,10 +33,10 @@ export const mapReconciliationResponse = (
 
 // helper
 const mapStatus = (status: string): "matched" | "unmatched" | "pending" => {
-  switch (status?.toLowerCase()) {
-    case "matched":
+  switch (status) {
+    case "FULL_MATCH":
       return "matched";
-    case "unmatched":
+    case "NO_MATCH":
       return "unmatched";
     default:
       return "pending";

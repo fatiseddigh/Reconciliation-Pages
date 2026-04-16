@@ -1,20 +1,25 @@
 "use client";
 
-import { useReconciliation } from "@/features/reconciliation/hooks/use-reconciliation";
+import {
+  ReconciliationTable,
+  useReconciliation,
+} from "@/features/reconciliation";
 
 export default function LetKnowPayPage() {
   const { data, isLoading, isError } = useReconciliation("letknowpay", {
     page: 1,
-    limit: 50,
+    limit: 10,
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading data</div>;
+  if (isError) {
+    return <div className="p-4 text-red-500">Something went wrong</div>;
+  }
 
   return (
-    <div>
-      <h1>LetKnowPay</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+    <div className="p-6 space-y-4">
+      <h1 className="text-xl font-semibold">LetKnowPay</h1>
+
+      <ReconciliationTable data={data?.items || []} isLoading={isLoading} />
     </div>
   );
 }

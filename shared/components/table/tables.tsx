@@ -17,7 +17,7 @@ export function Table<T>({
   return (
     <div className="overflow-auto border rounded-xl">
       <table className="min-w-full text-sm">
-        <thead className="bg-gray-100 text-left">
+        <thead className="bg-blue-500 text-left">
           <tr>
             {columns.map((col) => (
               <th key={String(col.key)} className="p-3 font-medium">
@@ -29,7 +29,10 @@ export function Table<T>({
 
         <tbody>
           {data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="border-t hover:bg-gray-50 transition">
+            <tr
+              key={rowIndex}
+              className="border-t hover:bg-blue-300 hover:text-black transition"
+            >
               {columns.map((col) => {
                 const value = row[col.key];
 
