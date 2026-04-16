@@ -4,6 +4,9 @@ import { Column } from "@/shared/components/table/types";
 import { ReconciliationItem } from "../types/types";
 import { StatusBadge } from "./status-badge";
 import { Table } from "@/shared/components/table/tables";
+import { useState } from "react";
+import { Modal } from "@/shared/components/modal/modal";
+import { ReconciliationDetails } from "./reconciliation-details";
 
 interface Props {
   data: ReconciliationItem[];
@@ -11,6 +14,9 @@ interface Props {
 }
 
 export function ReconciliationTable({ data, isLoading }: Props) {
+  const [selectedRow, setSelectedRow] = useState<ReconciliationItem | null>(
+    null,
+  );
   const columns: Column<ReconciliationItem>[] = [
     {
       key: "reference",
@@ -50,5 +56,21 @@ export function ReconciliationTable({ data, isLoading }: Props) {
     },
   ];
 
-  return <Table data={data} columns={columns} isLoading={isLoading} />;
+  return (
+    <>
+      <Table
+        data={data}
+        columns={columns}
+        isLoading={isLoading}
+        onRowClick={(row) => setSelectedRow(row)}
+      />
+      <Modal
+        open={!!selectedRow}
+        onClose={() => setSelectedRow(null)}
+        title="Transaction Details"
+      >
+        {selectedRow && <ReconciliationDetails item={selectedRow} />}
+      </Modal>
+    </>
+  );
 }

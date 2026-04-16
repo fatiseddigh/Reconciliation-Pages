@@ -13,6 +13,7 @@ export interface Column<T> {
 export interface TableProps<T> {
   data: T[];
   columns: Column<T>[];
+  onRowClick?: (row: T) => void;
   isLoading?: boolean;
   emptyMessage?: string;
 }

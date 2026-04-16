@@ -3,6 +3,7 @@ import { TableProps } from "./types";
 export function Table<T>({
   data,
   columns,
+  onRowClick,
   isLoading,
   emptyMessage = "No data found",
 }: TableProps<T>) {
@@ -31,7 +32,8 @@ export function Table<T>({
           {data.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-              className="border-t hover:bg-blue-300 hover:text-black transition"
+              onClick={() => onRowClick?.(row)}
+              className="border-t cursor-pointer hover:bg-blue-300 hover:text-black transition"
             >
               {columns.map((col) => {
                 const value = row[col.key];

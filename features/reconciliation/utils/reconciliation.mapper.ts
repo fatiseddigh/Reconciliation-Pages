@@ -10,7 +10,6 @@ export const mapReconciliationItem = (
   item: ReconciliationApiItem,
 ): ReconciliationItem => {
   const isWithdrawal = "crm_deal_id" in item;
-  console.log(item);
   if (isWithdrawal) {
     return {
       id: String(item.crm_deal_id),

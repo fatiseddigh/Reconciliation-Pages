@@ -21,6 +21,7 @@ export interface ReconciliationApiItem {
   recon_status: string;
   deal_time: string;
   // optional fields
+  crm_mt5_status?: string;
   comment?: string;
   description?: string;
 }
@@ -28,13 +29,14 @@ export interface ReconciliationApiItem {
 // UI Types
 export interface ReconciliationItem {
   id: string;
-  reference: string | number;
+  reference: string | number | unknown;
   amount: number;
   currency: string;
   status: "matched" | "unmatched" | "pending";
   createdAt: Date;
 
   // optional (withdrawal)
+  crm_mt5_status?: string;
   method?: string;
   approvedBy?: string;
 }
