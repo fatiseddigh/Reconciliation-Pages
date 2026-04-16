@@ -5,18 +5,31 @@ import {
   ReconciliationTable,
   useReconciliation,
 } from "@/features/reconciliation";
-import { useState } from "react";
+import { Pagination } from "@/shared/components/pagination/pagination";
+import { useState, useMemo } from "react";
 
 export default function LetKnowPayPage() {
+  const [page, setPage] = useState(1);
+
   const [filters, setFilters] = useState<{
     search?: string;
     status?: string;
   }>({});
-  const { data, isLoading, isError } = useReconciliation("letknowpay", {
-    page: 1,
-    limit: 10,
-    ...filters,
-  });
+
+  const queryParams = useMemo(
+    () => ({
+      page,
+      limit: 10,
+      ...filters,
+    }),
+    [page, filters],
+  );
+
+  const { data, isLoading, isError } = useReconciliation(
+    "letknowpay",
+    queryParams,
+  );
+
   const filteredData = data?.items.filter((item) => {
     const matchesSearch =
       !filters.search ||
@@ -34,8 +47,30 @@ export default function LetKnowPayPage() {
   return (
     <div className="p-6 space-y-4">
       <h1 className="text-xl font-semibold">LetKnowPay</h1>
-      <ReconciliationFilters onChange={setFilters} />
+
+      <ReconciliationFilters
+        onChange={(newFilters) => {
+          setFilters((prev) => {
+            const isSame =
+              prev.search === newFilters.search &&
+              prev.status === newFilters.status;
+
+            if (isSame) return prev;
+
+            setPage(1);
+
+            return newFilters;
+          });
+        }}
+      />
+
       <ReconciliationTable data={filteredData || []} isLoading={isLoading} />
+
+      <Pagination
+        page={page}
+        totalPages={data?.totalPages || 1}
+        onPageChange={setPage}
+      />
     </div>
   );
 }

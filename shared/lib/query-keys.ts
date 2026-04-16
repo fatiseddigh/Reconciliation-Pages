@@ -1,8 +1,8 @@
-import { ReconciliationQueryParams } from "@/features/reconciliation/types/types";
+// import { ReconciliationQueryParams } from "@/features/reconciliation/types/types";
 
 export const queryKeys = {
   reconciliation: (
     type: "letknowpay" | "withdrawal",
-    params: ReconciliationQueryParams,
+    params: Record<string, any>,
   ) => ["reconciliation", type, JSON.stringify(params)] as const,
 };

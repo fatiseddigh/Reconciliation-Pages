@@ -28,6 +28,7 @@ export const mapReconciliationResponse = (
     total: response.total,
     page: response.page,
     limit: response.limit,
+    totalPages: response.total_pages,
   };
 };
 
