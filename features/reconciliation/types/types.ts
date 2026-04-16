@@ -28,11 +28,15 @@ export interface ReconciliationApiItem {
 // UI Types
 export interface ReconciliationItem {
   id: string;
+  reference: string | number;
   amount: number;
   currency: string;
   status: "matched" | "unmatched" | "pending";
-  reference: string;
   createdAt: Date;
+
+  // optional (withdrawal)
+  method?: string;
+  approvedBy?: string;
 }
 
 // Query Params

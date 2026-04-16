@@ -33,7 +33,9 @@ export default function LetKnowPayPage() {
   const filteredData = data?.items.filter((item) => {
     const matchesSearch =
       !filters.search ||
-      item.reference.toLowerCase().includes(filters.search.toLowerCase());
+      String(item.reference)
+        .toLowerCase()
+        .includes(filters.search.toLowerCase());
 
     const matchesStatus = !filters.status || item.status === filters.status;
 

@@ -19,23 +19,34 @@ export function ReconciliationTable({ data, isLoading }: Props) {
     {
       key: "amount",
       header: "Amount",
-      render: (value, row) => (
+      render: (_, row) => (
         <span>
-          {row.currency} {value as number}
+          {row.currency} {row.amount}
         </span>
       ),
     },
     {
       key: "status",
       header: "Status",
-      render: (value) => (
-        <StatusBadge status={value as ReconciliationItem["status"]} />
-      ),
+      render: (_, row) => <StatusBadge status={row.status} />,
     },
+
+    // only  withdrawal
+    {
+      key: "method",
+      header: "Method",
+      render: (_, row) => row.method || "-",
+    },
+    {
+      key: "approvedBy",
+      header: "Approved By",
+      render: (_, row) => row.approvedBy || "-",
+    },
+
     {
       key: "createdAt",
       header: "Date",
-      render: (value) => new Date(value as Date).toLocaleDateString(),
+      render: (_, row) => new Date(row.createdAt).toLocaleDateString(),
     },
   ];
 
