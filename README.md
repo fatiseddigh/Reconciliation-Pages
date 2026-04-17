@@ -1,36 +1,173 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Reconciliation Pages (Frontend Task)
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This project implements two reconciliation pages based on the provided APIs:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+* Payment Reconciliation (`/reconciliation/payment`)
+* Withdrawal Reconciliation (`/reconciliation/withdrawal`)
+
+The goal was to build a clean, maintainable, and scalable frontend using modern React patterns and proper separation of concerns.
+
+---
+
+## Tech Stack
+
+* Next.js (App Router)
+* TypeScript
+* React Query (TanStack Query)
+* Axios
+* Tailwind CSS
+
+---
+
+## Features
+
+### Core Requirements
+
+* Fetch and display data in a table
+* Loading, error, and empty states handling
+* Pagination (page + limit)
+* Basic filtering:
+
+  * Search
+  * Status
+* Status displayed with colored badges
+* Clean CRM-style UI
+
+### Bonus Features
+
+* Row details modal (click on row)
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── reconciliation/
+│   │   ├── payment/
+│   │   ├── withdrawal/
+│
+├── features/
+│   ├── reconciliation/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   ├── types/
+│   │   ├── utils/
+│
+├── shared/
+│   ├── components/
+│   ├── lib/
+│   ├── utils/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Key Architectural Decisions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* **Separation of Concerns (SOC)**:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+  * API logic → `services/`
+  * State & data fetching → `hooks/`
+  * UI → `components/`
+* **Reusable Components**:
 
-## Learn More
+  * Generic Table
+  * Modal
+  * Pagination
+* **Feature-based structure** for scalability
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Data Handling Strategy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The two APIs return slightly different data structures.
 
-## Deploy on Vercel
+To handle this:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* A **unified mapper** was implemented
+* API responses are normalized into a shared `ReconciliationItem` type
+* This allows reuse of the same table and UI components
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Filtering & Pagination
+
+### Important Note
+
+The API does **not support filtering** (search/status).
+
+Because of that:
+
+* Filtering is implemented **on the client side**
+* Pagination behavior:
+
+  * Server-side pagination when no filters are applied
+  * Client-side pagination when filtering is active
+
+This ensures correct UX while still respecting API limitations.
+
+---
+
+## Challenges
+
+### 1. Inconsistent API Structure
+
+The payment and withdrawal endpoints returned different field names.
+
+**Solution:**
+
+* Created a unified mapper with type guards
+
+---
+
+### 2. React Query Infinite Refetch Issue
+
+Passing unstable objects into query keys caused re-fetch loops.
+
+**Solution:**
+
+* Stabilized params using `useMemo`
+* Used consistent query key strategy
+
+---
+
+### 3. Filtering with Pagination
+
+Client-side filtering conflicted with server pagination.
+
+**Solution:**
+
+* Switched to client-side pagination when filters are active
+
+---
+
+## Possible Improvements
+
+* Server-side filtering (if API supports it)
+* Better pagination UI (page numbers)
+* Column customization
+* CSV export UI integration
+
+---
+
+## How to Run
+
+```bash
+npm install
+npm run dev
+```
+
+---
+
+## Final Notes
+
+The focus of this implementation was:
+
+* Clean and maintainable structure
+* Proper data flow
+* Reusable components
+* Real-world frontend patterns
+
+No unnecessary abstractions were introduced, and complexity was kept proportional to the task.
